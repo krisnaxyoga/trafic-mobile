@@ -48,7 +48,8 @@ class HomePage extends StatelessWidget {
             itemBuilder: (context, index) {
               Level level = cLevel.listLevel[index];
               return ListTile(
-                title: Text('Level: ${level.levelNumber.toString()}'),
+                title: Text(
+                    'Level: ${int.parse(level.levelNumber.toString() ?? '0')}'),
                 subtitle: Text(level.levelDesc ?? ''),
                 onTap: () {
                   // Handle tap on workshop item if needed

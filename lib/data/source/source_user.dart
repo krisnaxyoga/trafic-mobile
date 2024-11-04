@@ -6,7 +6,7 @@ import 'package:mobile_traffic/data/model/user.dart';
 
 class SourceUser {
   static Future<bool> login(String email, String password) async {
-    String url = 'http://192.168.181.248:8000/api/login';
+    String url = 'https://be-traffic.tenryubito.com/api/login';
     Map? responseBody = await AppRequest.post(url, {
       'email': email,
       'password': password,
@@ -29,7 +29,7 @@ class SourceUser {
 
   static Future<bool> register(
       String name, String email, String password) async {
-    String url = 'http://192.168.181.248:8000/api/register';
+    String url = 'https://be-traffic.tenryubito.com/api/register';
     Map? responseBody = await AppRequest.post(url, {
       'name': name,
       'email': email,
@@ -57,7 +57,7 @@ class SourceUser {
     final token = await Session.getToken();
     if (token == null) return <User>[];
 
-    String url = 'http://192.168.181.248:8000/api/users';
+    String url = 'https://be-traffic.tenryubito.com/api/users';
     final responseBody = await AppRequest.gets(
       url,
       headers: {
