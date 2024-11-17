@@ -49,6 +49,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: Column(
                         children: [
                           Image.asset(AppAsset.logo),
+                          const Center(
+                            child: Text(
+                              'Traffic Game Quiz',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
                           DView.spaceHeight(40),
                           TextFormField(
                             controller: controllerName,
@@ -58,17 +68,42 @@ class _RegisterPageState extends State<RegisterPage> {
                                 AutovalidateMode.onUserInteraction,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              fillColor: AppColor.primary.withOpacity(0.5),
+                              fillColor: Colors.white,
                               filled: true,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
                               ),
                               hintText: 'name',
                               isDense: true,
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
-                                vertical: 16,
+                                vertical: 20,
+                              ),
+                            ),
+                          ),
+                          DView.spaceHeight(),
+                          TextFormField(
+                            controller: controllerName,
+                            validator: (value) =>
+                                value == '' ? 'Jangan kosong' : null,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
+                              ),
+                              hintText: 'phone',
+                              isDense: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 20,
                               ),
                             ),
                           ),
@@ -81,17 +116,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                 AutovalidateMode.onUserInteraction,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              fillColor: AppColor.primary.withOpacity(0.5),
+                              fillColor: Colors.white,
                               filled: true,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
                               ),
                               hintText: 'email',
                               isDense: true,
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
-                                vertical: 16,
+                                vertical: 20,
                               ),
                             ),
                           ),
@@ -105,17 +141,18 @@ class _RegisterPageState extends State<RegisterPage> {
                             obscureText: true,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              fillColor: AppColor.primary.withOpacity(0.5),
+                              fillColor: Colors.white,
                               filled: true,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black),
                               ),
                               hintText: 'password',
                               isDense: true,
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
-                                vertical: 16,
+                                vertical: 20,
                               ),
                             ),
                           ),

@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.bg,
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -57,6 +57,17 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           Image.asset(AppAsset.logo),
+                          const Center(
+                            child: Text(
+                              'Traffic Game Quiz',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          DView.spaceHeight(20),
                           DView.spaceHeight(40),
                           TextFormField(
                             controller: controllerEmail,
@@ -68,17 +79,18 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.white,
                             ),
                             decoration: InputDecoration(
-                              fillColor: AppColor.primary.withOpacity(0.5),
                               filled: true,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Colors.black,
+                                ),
                               ),
                               hintText: 'Email',
                               isDense: true,
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
-                                vertical: 16,
+                                vertical: 20,
                               ),
                             ),
                           ),
@@ -94,17 +106,19 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             obscureText: true,
                             decoration: InputDecoration(
-                              fillColor: AppColor.primary.withOpacity(0.5),
+                              fillColor: Colors.white,
                               filled: true,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Colors.black,
+                                ),
                               ),
                               hintText: 'Password',
                               isDense: true,
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
-                                vertical: 16,
+                                vertical: 20,
                               ),
                             ),
                           ),
@@ -114,7 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(30),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(30),
-                              onTap: () => login(),
+                              onTap: () {
+                                Get.to(() => const HomePage());
+                              },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 40, vertical: 16),
@@ -138,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'belum punya akun ? ',
+                          'if you dont have account,',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -149,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                             Get.to(() => const RegisterPage());
                           },
                           child: Text(
-                            'Register',
+                            'Register here',
                             style: TextStyle(
                               color: AppColor.primary,
                               fontWeight: FontWeight.bold,

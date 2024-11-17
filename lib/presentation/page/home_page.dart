@@ -1,130 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile_traffic/data/model/level.dart';
-import 'package:mobile_traffic/presentation/controller/c_level.dart';
-import 'package:mobile_traffic/presentation/page/addworkshoppage.dart';
+import 'package:mobile_traffic/config/app_color.dart';
+import 'package:mobile_traffic/presentation/page/level_page.dart';
+import 'package:mobile_traffic/presentation/page/profile_page.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
-
-  final CLevel cLevel = Get.put(CLevel());
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Level'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              // Navigasi ke halaman AddWorkshopPage ketika tombol tambah ditekan
-              Get.to(() => AddWorkshopPage());
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text('Home', style: TextStyle(color: Colors.black, fontSize: 20)),
+            ],
+          ),
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                color: Colors.black,
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              );
             },
           ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 20),
-            GetBuilder<CLevel>(
-              builder: (_) => _buildWorkshopList(),
-            ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.person),
+              color: Colors.black,
+              onPressed: () {
+                Get.to(() => const ProfilePage());
+              },
+            )
           ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              ListTile(
+                title: const Text('Profile'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/profile');
+                },
+              ),
+              ListTile(
+                title: const Text('Level'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/level');
+                },
+              ),
+            ],
+          ),
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              SizedBox(height: 50),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: AppColor.primary,
+                ),
+                width: 400,
+                height: 260,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '0',
+                        style: TextStyle(
+                          fontSize: 70,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Score',
+                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Material(
+                color: AppColor.primary,
+                borderRadius: BorderRadius.circular(30),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(30),
+                  onTap: () {
+                    Get.to(() => const LevelPage());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 16),
+                    child: Text(
+                      'Start Game',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  Widget _buildWorkshopList() {
-    return cLevel.listLevel.isEmpty
-        ? Center(child: CircularProgressIndicator())
-        : ListView.builder(
-            shrinkWrap: true,
-            itemCount: cLevel.listLevel.length,
-            itemBuilder: (context, index) {
-              Level level = cLevel.listLevel[index];
-              return ListTile(
-                title: Text(
-                    'Level: ${int.parse(level.levelNumber.toString() ?? '0')}'),
-                subtitle: Text(level.levelDesc ?? ''),
-                onTap: () {
-                  // Handle tap on workshop item if needed
-                },
-              );
-            },
-          );
-  }
 }
-
-// import 'dart:convert';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:mobile_traffic/config/session.dart';
-// import 'package:mobile_traffic/data/model/workshop.dart';
-
-// class HomePage extends StatelessWidget {
-//   const HomePage({Key? key}) : super(key: key);
-
-//   Future<List<Workshop>> fetchWorkshops() async {
-//     String url = 'http://172.17.2.76:8005/api/workshop';
-//     String? token = await Session.getToken();
-
-//     try {
-//       final response = await http.get(
-//         Uri.parse(url),
-//         headers: {
-//           'Authorization': 'Bearer $token',
-//         },
-//       );
-//       print(token);
-//       if (response.statusCode == 200) {
-//         List<dynamic> data = json.decode(response.body)['data'];
-//         return data.map((json) => Workshop.fromJson(json)).toList();
-//       } else {
-//         throw Exception('Failed to load workshops');
-//       }
-//     } catch (e) {
-//       print('Error fetching workshops: $e');
-//       throw Exception('Failed to load workshops');
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Workshops')),
-//       body: FutureBuilder<List<Workshop>>(
-//         future: fetchWorkshops(),
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             return Center(child: CircularProgressIndicator());
-//           } else if (snapshot.hasError) {
-//             return Center(child: Text('Error: ${snapshot.error}'));
-//           } else if (snapshot.hasData) {
-//             List<Workshop> workshops = snapshot.data!;
-//             return ListView.builder(
-//               itemCount: workshops.length,
-//               itemBuilder: (context, index) {
-//                 Workshop workshop = workshops[index];
-//                 return ListTile(
-//                   title: Text(workshop.ownerName ?? ''),
-//                   subtitle: Text(workshop.email ?? ''),
-//                   onTap: () {
-//                     // Handle tap on workshop item if needed
-//                   },
-//                 );
-//               },
-//             );
-//           } else {
-//             return Center(child: Text('No workshops available'));
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
