@@ -1,12 +1,12 @@
 class Level {
   Level({
-    required this.id,
-    required this.levelNumber,
-    required this.difficulty,
-    required this.levelDesc,
-    required this.targetScore,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.levelNumber,
+    this.difficulty,
+    this.levelDesc,
+    this.targetScore,
+    this.createdAt,
+    this.updatedAt,
   });
 
   int? id;

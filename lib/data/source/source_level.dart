@@ -7,14 +7,14 @@ class SourceLevel {
     final token = await Session.getToken();
     if (token == null) return <Level>[];
 
-    String url = 'http://192.168.131.248:8000/api/level';
+    String url = 'https://be-traffic.tenryubito.com/api/level';
     final responseBody = await AppRequest.gets(
       url,
       headers: {
         'Authorization': 'Bearer $token',
       },
     );
-    print(responseBody);
+    print(responseBody); // debug response
     if (responseBody?['success'] == true) {
       final List<dynamic> list = responseBody?['data'];
       return list.map<Level>((json) => Level.fromJson(json)).toList();
