@@ -9,7 +9,7 @@ class SourceWorkshop {
     final token = await Session.getToken();
     if (token == null) return <Workshop>[];
 
-    String url = 'http://192.168.191.248:8000/api/levels';
+    String url = 'http://192.168.131.248:8000/api/levels';
     final responseBody = await AppRequest.gets(
       url,
       headers: {
@@ -38,7 +38,7 @@ class SourceWorkshop {
     final token = await Session.getToken();
     if (token == null) return false;
 
-    String url = 'http://192.168.191.248:8000/api/workshop';
+    String url = 'http://192.168.131.248:8000/api/workshop';
     final Map<String, dynamic> requestBody = {
       'name': name,
       'owner_name': ownerName,
