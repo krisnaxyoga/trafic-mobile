@@ -60,7 +60,7 @@ class QuizPage extends StatelessWidget {
               ListTile(
                 title: const Text('Level'),
                 onTap: () {
-                  Get.to(() => const LevelPage());
+                  Get.to(() => LevelPage());
                 },
               ),
             ],

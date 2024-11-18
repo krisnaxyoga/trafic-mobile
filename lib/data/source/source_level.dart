@@ -5,9 +5,10 @@ import 'package:mobile_traffic/data/model/level.dart';
 class SourceLevel {
   static Future<List<Level>> getLevel() async {
     final token = await Session.getToken();
+    print(token);
     if (token == null) return <Level>[];
 
-    String url = 'https://be-traffic.tenryubito.com/api/level';
+    String url = 'http://10.0.2.2:8000/api/level';
     final responseBody = await AppRequest.gets(
       url,
       headers: {

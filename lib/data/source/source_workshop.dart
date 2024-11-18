@@ -9,7 +9,7 @@ class SourceWorkshop {
     final token = await Session.getToken();
     if (token == null) return <Workshop>[];
 
-    String url = 'https://be-traffic.tenryubito.com/api/levels';
+    String url = 'http://10.0.2.2:8000/api/levels';
     final responseBody = await AppRequest.gets(
       url,
       headers: {
@@ -38,7 +38,7 @@ class SourceWorkshop {
     final token = await Session.getToken();
     if (token == null) return false;
 
-    String url = 'https://be-traffic.tenryubito.com/api/workshop';
+    String url = 'http://10.0.2.2:8000/api/workshop';
     final Map<String, dynamic> requestBody = {
       'name': name,
       'owner_name': ownerName,

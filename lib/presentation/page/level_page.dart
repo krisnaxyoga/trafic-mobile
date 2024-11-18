@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_traffic/data/model/level.dart';
+import 'package:mobile_traffic/presentation/controller/c_level.dart';
 import 'package:mobile_traffic/presentation/page/quiz_page.dart';
-
 import '../../config/app_color.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
 
 class LevelPage extends StatelessWidget {
-  const LevelPage({super.key});
+  LevelPage({super.key});
+  final CLevel cLevel = Get.put(CLevel());
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +17,11 @@ class LevelPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text('Level',
-                  style: TextStyle(color: Colors.black, fontSize: 20)),
-            ],
+          title: const Text(
+            'Level',
+            style: TextStyle(color: Colors.black, fontSize: 20),
           ),
+          centerTitle: true,
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
@@ -35,10 +35,13 @@ class LevelPage extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.person),
               color: Colors.black,
-              onPressed: () {
-                Get.to(() => const ProfilePage());
-              },
-            )
+              onPressed: () => Get.to(() => const ProfilePage()),
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              color: Colors.black,
+              onPressed: () => cLevel.getListLevel(),
+            ),
           ],
         ),
         drawer: Drawer(
@@ -47,185 +50,109 @@ class LevelPage extends StatelessWidget {
             children: <Widget>[
               ListTile(
                 title: const Text('Home'),
-                onTap: () {
-                  Get.to(() => const HomePage());
-                },
+                onTap: () => Get.to(() => const HomePage()),
               ),
               ListTile(
                 title: const Text('Profile'),
-                onTap: () {
-                  Get.to(() => const ProfilePage());
-                },
+                onTap: () => Get.to(() => const ProfilePage()),
               ),
               ListTile(
                 title: const Text('Level'),
-                onTap: () {
-                  Get.to(() => const LevelPage());
-                },
+                onTap: () => Get.to(() => LevelPage()),
               ),
             ],
           ),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              SizedBox(height: 50),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => QuizPage());
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: AppColor.primary,
-                  ),
-                  width: 500,
-                  height: 120,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+          child: GetBuilder<CLevel>(
+            builder: (controller) {
+              if (controller.listLevel.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return ListView.builder(
+                padding: const EdgeInsets.only(top: 50),
+                itemCount: controller.listLevel.length,
+                itemBuilder: (context, index) {
+                  final Level level = controller.listLevel[index];
+                  // Level sebelumnya harus selesai untuk membuka level selanjutnya
+                  final bool isLocked = index > 0;
+
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: GestureDetector(
+                      onTap: isLocked ? null : () => Get.to(() => QuizPage()),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: isLocked
+                              ? const Color(0xFF79747E)
+                              : AppColor.primary,
+                        ),
+                        height: 120,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Level 1',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Level ${level.levelNumber}',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      level.levelDesc ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Target Score: ${level.targetScore}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white70,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          'Difficulty: ${level.difficulty}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white70,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'maksimum points: 1000',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
+                              Icon(
+                                isLocked ? Icons.lock : Icons.play_arrow,
+                                color: Colors.white,
+                                size: 28,
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(width: 20),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(
-                            Icons.pause,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Color(0xFF79747E),
-                ),
-                width: 500,
-                height: 120,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Level 2',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'maksimum points: 2000',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Icon(
-                          Icons.play_arrow,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Color(0xFF79747E),
-                ),
-                width: 500,
-                height: 120,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Level 3',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'maksimum points: 3000',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Icon(
-                          Icons.play_arrow,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+                  );
+                },
+              );
+            },
           ),
         ),
       ),

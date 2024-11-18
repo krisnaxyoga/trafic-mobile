@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:mobile_traffic/config/app_color.dart';
 import 'package:mobile_traffic/presentation/page/level_page.dart';
 import 'package:mobile_traffic/presentation/page/profile_page.dart';
+import 'package:mobile_traffic/data/source/source_user.dart';
+
+import 'auth/login_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -54,6 +57,23 @@ class HomePage extends StatelessWidget {
                   Navigator.pushNamed(context, '/level');
                 },
               ),
+              ListTile(
+                title: const Text('Logout'),
+                onTap: () {
+                  Get.defaultDialog(
+                    title: 'Logout',
+                    middleText: 'Are you sure to logout?',
+                    textConfirm: 'Yes',
+                    confirmTextColor: Colors.red,
+                    textCancel: 'No',
+                    cancelTextColor: Colors.green,
+                    onConfirm: () {
+                      SourceUser.logout();
+                      Get.offAll(() => LoginPage());
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -100,7 +120,7 @@ class HomePage extends StatelessWidget {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(30),
                   onTap: () {
-                    Get.to(() => const LevelPage());
+                    Get.to(() => LevelPage());
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

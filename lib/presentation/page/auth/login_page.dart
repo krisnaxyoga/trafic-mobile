@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                             decoration: InputDecoration(
                               filled: true,
@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                             obscureText: true,
                             decoration: InputDecoration(
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: InkWell(
                               borderRadius: BorderRadius.circular(30),
                               onTap: () {
-                                Get.to(() => const HomePage());
+                                login();
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
