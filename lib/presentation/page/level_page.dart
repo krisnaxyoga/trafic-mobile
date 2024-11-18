@@ -4,13 +4,14 @@ import 'package:mobile_traffic/data/model/level.dart';
 import 'package:mobile_traffic/presentation/controller/c_level.dart';
 import 'package:mobile_traffic/presentation/page/quiz_page.dart';
 import '../../config/app_color.dart';
+import '../controller/c_user.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
 
 class LevelPage extends StatelessWidget {
   LevelPage({super.key});
   final CLevel cLevel = Get.put(CLevel());
-
+  final CUser cUser = Get.put(CUser());
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -63,98 +64,105 @@ class LevelPage extends StatelessWidget {
             ],
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: GetBuilder<CLevel>(
-            builder: (controller) {
-              if (controller.listLevel.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return ListView.builder(
-                padding: const EdgeInsets.only(top: 50),
-                itemCount: controller.listLevel.length,
-                itemBuilder: (context, index) {
-                  final Level level = controller.listLevel[index];
-                  // Level sebelumnya harus selesai untuk membuka level selanjutnya
-                  final bool isLocked = index > 0;
+        body: Obx(() {
+          final user = cUser.data;
+          if (user.idUser == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: GetBuilder<CLevel>(
+              builder: (controller) {
+                if (controller.listLevel.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.only(top: 50),
+                  itemCount: controller.listLevel.length,
+                  itemBuilder: (context, index) {
+                    final Level level = controller.listLevel[index];
+                    // Level sebelumnya harus selesai untuk membuka level selanjutnya
+                    final bool isLocked = index > 0;
 
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: GestureDetector(
-                      onTap: isLocked ? null : () => Get.to(() => QuizPage()),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: isLocked
-                              ? const Color(0xFF79747E)
-                              : AppColor.primary,
-                        ),
-                        height: 120,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Level ${level.levelNumber}',
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      level.levelDesc ?? '',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Target Score: ${level.targetScore}',
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white70,
-                                          ),
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: GestureDetector(
+                        onTap: isLocked ? null : () => Get.to(() => QuizPage()),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: isLocked
+                                ? const Color(0xFF79747E)
+                                : AppColor.primary,
+                          ),
+                          height: 120,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Level id ${level.id}',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
                                         ),
-                                        const SizedBox(width: 10),
-                                        Text(
-                                          'Difficulty: ${level.difficulty}',
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white70,
-                                          ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        level.levelDesc ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
                                         ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Target Score: ${level.targetScore}',
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white70,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            'Difficulty: ${level.difficulty}',
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white70,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Icon(
-                                isLocked ? Icons.lock : Icons.play_arrow,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ],
+                                Icon(
+                                  isLocked ? Icons.lock : Icons.play_arrow,
+                                  color: Colors.white,
+                                  size: 28,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ),
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        }),
       ),
     );
   }
