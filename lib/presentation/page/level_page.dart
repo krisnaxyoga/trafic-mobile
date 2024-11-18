@@ -87,7 +87,10 @@ class LevelPage extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: GestureDetector(
-                        onTap: isLocked ? null : () => Get.to(() => QuizPage()),
+                        onTap: isLocked
+                            ? null
+                            : () =>
+                                Get.to(() => QuizPage(), arguments: level.id),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),

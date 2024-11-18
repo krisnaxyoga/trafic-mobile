@@ -1,5 +1,8 @@
 class Api {
-  static const baseUrl = 'http://172.17.2.76:8005/api';
-  static const history = '$baseUrl/history';
-  static const user = '$baseUrl/people';
+  static const baseUrl = 'http://10.0.2.2:8000/api';
+  static const level = '$baseUrl/level';
+  static const user = '$baseUrl/users';
+  static const login = '$baseUrl/login';
+  static const logout = '$baseUrl/logout';
+  static const register = '$baseUrl/register';
 }
