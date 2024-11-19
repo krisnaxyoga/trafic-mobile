@@ -1,7 +1,7 @@
 import 'package:mobile_traffic/data/model/question.dart';
 
 class Api {
-  static const baseUrl = 'http://10.0.2.2:8000/api';
+  static const baseUrl = 'https://be-traffic.tenryubito.com/api';
   static const level = '$baseUrl/level';
   static const user = '$baseUrl/users';
   static const login = '$baseUrl/login';

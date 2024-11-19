@@ -14,6 +14,7 @@ class LevelPage extends StatelessWidget {
   final CUser cUser = Get.put(CUser());
   @override
   Widget build(BuildContext context) {
+    Get.put(CUser()).onInit();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -83,8 +84,9 @@ class LevelPage extends StatelessWidget {
                   final Level level = controller.listLevel[index];
                   // Logika terkunci jika level sebelumnya belum tercapai
                   final bool isLocked = index > 0 &&
-                      !user.userScores!.any((e) => e.idLevel == level.id);
-
+                      !user.userScores!
+                          .any((e) => e.idLevel == level.id!.toString());
+                  print('$isLocked apa ini');
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: GestureDetector(

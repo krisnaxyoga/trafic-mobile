@@ -10,10 +10,10 @@ class Level {
   });
 
   int? id;
-  int? levelNumber;
+  String? levelNumber;
   String? difficulty;
   String? levelDesc;
-  int? targetScore;
+  String? targetScore;
   DateTime? createdAt;
   DateTime? updatedAt;
 

@@ -71,7 +71,7 @@ class CQuiz extends GetxController {
       );
 
       if (response['message'] == 'Benar') {
-        _score.value += 1;
+        _score.value += 10;
       }
 
       _isAnswered.value = true;

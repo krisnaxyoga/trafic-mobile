@@ -11,9 +11,9 @@ class UserScore {
   });
 
   final int? id;
-  final int? idUser;
-  final int? idLevel;
-  final int? score;
+  final String? idUser;
+  final String? idLevel;
+  final String? score;
   final String? completedAt;
   final String? createdAt;
   final String? updatedAt;

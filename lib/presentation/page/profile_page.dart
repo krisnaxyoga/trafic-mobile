@@ -91,14 +91,6 @@ class ProfilePage extends StatelessWidget {
                               color: Colors.black,
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          Text(
-                            'Created At: ${user.createdAt ?? "-"}',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
-                          ),
                         ],
                       ),
                     ),

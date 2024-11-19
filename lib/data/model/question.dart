@@ -1,9 +1,9 @@
 class Level {
   final int id;
-  final int levelNumber;
+  final String levelNumber;
   final String difficulty;
   final String levelDesc;
-  final int targetScore;
+  final String targetScore;
   final String createdAt;
   final String updatedAt;
 
@@ -20,10 +20,10 @@ class Level {
   factory Level.fromJson(Map<String, dynamic> json) {
     return Level(
       id: json['id'] ?? 0,
-      levelNumber: json['level_number'] ?? 0,
+      levelNumber: json['level_number'] ?? '',
       difficulty: json['difficulty'] ?? '',
       levelDesc: json['level_desc'] ?? '',
-      targetScore: json['target_score'] ?? 0,
+      targetScore: json['target_score'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
     );
@@ -48,7 +48,7 @@ class Sign {
   // Getter untuk mendapatkan URL gambar
   String get imageUrl {
     // Sesuaikan dengan URL server yang Anda gunakan
-    return 'http://10.0.2.2:8000/storage/$signImage'; // Untuk Android Emulator
+    return 'https://be-traffic.tenryubito.com/storage/$signImage'; // Untuk Android Emulator
     // return 'http://localhost:8000/storage/$signImage'; // Untuk iOS Simulator
     // return 'http://192.168.x.x:8000/storage/$signImage'; // Untuk perangkat fisik
   }
@@ -66,9 +66,9 @@ class Sign {
 
 class Question {
   final int id;
-  final int idLevel;
+  final String idLevel;
   final String questionText;
-  final int idSign;
+  final String idSign;
   final String optionA;
   final String optionB;
   final String optionC;
@@ -98,9 +98,9 @@ class Question {
   factory Question.fromJson(Map<String, dynamic> json) {
     return Question(
       id: json['id'] ?? 0,
-      idLevel: json['id_level'] ?? 0,
+      idLevel: json['id_level'] ?? '',
       questionText: json['question_text'] ?? '',
-      idSign: json['id_sign'] ?? 0,
+      idSign: json['id_sign'] ?? '',
       optionA: json['option_a'] ?? '',
       optionB: json['option_b'] ?? '',
       optionC: json['option_c'] ?? '',
