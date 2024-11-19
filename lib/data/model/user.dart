@@ -51,6 +51,7 @@ class User {
     this.createdAt,
     this.updatedAt,
     this.userScores,
+    this.total_score,
   });
 
   final int? idUser;
@@ -61,6 +62,7 @@ class User {
   final String? password;
   final String? createdAt;
   final String? updatedAt;
+  final String? total_score;
   final List<UserScore>? userScores;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -72,6 +74,7 @@ class User {
         password: json["password"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
+        total_score: json["total_score"],
         userScores: json["user_scores"] != null
             ? List<UserScore>.from(
                 json["user_scores"].map((x) => UserScore.fromJson(x)))
@@ -87,6 +90,7 @@ class User {
         "password": password,
         "created_at": createdAt,
         "updated_at": updatedAt,
+        "total_score": total_score,
         "user_scores": userScores != null
             ? List<dynamic>.from(userScores!.map((x) => x.toJson()))
             : null,

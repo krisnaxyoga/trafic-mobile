@@ -7,12 +7,14 @@ class QuizPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Tangkap id_level dari Get.arguments
-    final int idLevel = Get.arguments as int;
-
-    // Inisialisasi controller
-    final CQuiz cQuiz = Get.put(CQuiz());
-    cQuiz.fetchQuiz(idLevel); // Panggil fungsi untuk mengambil data quiz
+    Get.put(CQuiz()).onInit();
+    final int idLevel =
+        Get.arguments as int; // Mendapatkan idLevel dari argumen
+    final cQuiz = Get.put(CQuiz()); // Inisialisasi controller CQuiz
+    // Fetch quiz data when the page is first built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cQuiz.fetchQuiz(idLevel); // Ambil data quiz berdasarkan idLevel
+    });
 
     return SafeArea(
       child: Scaffold(
@@ -22,11 +24,26 @@ class QuizPage extends StatelessWidget {
             'Quiz',
             style: TextStyle(color: Colors.black, fontSize: 20),
           ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.black, // Set back button color to black
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () => cQuiz.fetchQuiz(idLevel), // Refresh data quiz
+              color: Colors.black,
+            ),
+          ],
         ),
         body: Obx(() {
           if (cQuiz.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator()); // Loading indicator
           }
 
           if (cQuiz.listQuiz.isEmpty) {
@@ -38,47 +55,102 @@ class QuizPage extends StatelessWidget {
             );
           }
 
-          // Ambil pertanyaan pertama (bisa di-loop untuk semua pertanyaan)
-          final question = cQuiz.listQuiz.first;
+          final currentQuestion = cQuiz.currentQuestion;
+          if (currentQuestion == null) {
+            return const Center(
+              child: Text(
+                'Error loading question.',
+                style: TextStyle(fontSize: 18),
+              ),
+            );
+          }
+
+          // Menampilkan informasi level dan sign (tanda)
+          final level = currentQuestion.level; // Mengakses informasi level
+          final sign = currentQuestion.sign; // Mengakses informasi sign
 
           return Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Tampilkan pertanyaan
+                // Menampilkan gambar tanda jika ada
+                if (sign?.signImage != null) ...[
+                  Image.network(
+                    sign!
+                        .imageUrl, // Menggunakan URL gambar dari getter imageUrl
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(height: 16),
+                ],
+                // Menampilkan nama level
+                if (level != null) ...[
+                  Text(
+                    'Level: ${level.levelNumber} - ${level.levelDesc}',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+                // Menampilkan pertanyaan saat ini
                 Text(
-                  question.questionText,
+                  'Pertanyaan ${cQuiz.currentIndex + 1} dari ${cQuiz.listQuiz.length}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  currentQuestion.questionText,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 20),
-
-                // Tampilkan opsi jawaban
+                const SizedBox(height: 24),
+                // Tombol Pilihan A, B, C, D
                 OptionButton(
                   optionLabel: 'A',
-                  optionText: question.optionA,
-                  onTap: () => cQuiz.answer(0),
+                  optionText: currentQuestion.optionA,
+                  onTap: cQuiz.isAnswered
+                      ? null
+                      : () => cQuiz.answer(0), // Disable if answered
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 OptionButton(
                   optionLabel: 'B',
-                  optionText: question.optionB,
-                  onTap: () => cQuiz.answer(1),
+                  optionText: currentQuestion.optionB,
+                  onTap: cQuiz.isAnswered
+                      ? null
+                      : () => cQuiz.answer(1), // Disable if answered
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 OptionButton(
                   optionLabel: 'C',
-                  optionText: question.optionC,
-                  onTap: () => cQuiz.answer(2),
+                  optionText: currentQuestion.optionC,
+                  onTap: cQuiz.isAnswered
+                      ? null
+                      : () => cQuiz.answer(2), // Disable if answered
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 OptionButton(
                   optionLabel: 'D',
-                  optionText: question.optionD,
-                  onTap: () => cQuiz.answer(3),
+                  optionText: currentQuestion.optionD,
+                  onTap: cQuiz.isAnswered
+                      ? null
+                      : () => cQuiz.answer(3), // Disable if answered
+                ),
+                const SizedBox(height: 24),
+                // Menampilkan skor saat ini
+                Text(
+                  'Skor: ${cQuiz.score}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
@@ -89,49 +161,59 @@ class QuizPage extends StatelessWidget {
   }
 }
 
-// Widget untuk membuat tombol opsi jawaban
 class OptionButton extends StatelessWidget {
   final String optionLabel;
   final String optionText;
-  final VoidCallback onTap;
+  final VoidCallback? onTap; // Nullable to disable the button
 
   const OptionButton({
     super.key,
     required this.optionLabel,
     required this.optionText,
-    required this.onTap,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Material(
-          color: Colors.blue, // Sesuaikan dengan warna utama
-          borderRadius: BorderRadius.circular(30),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(30),
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-              child: Text(
-                optionLabel,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
+    return Material(
+      color: Colors.white,
+      elevation: 2,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  optionLabel,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  optionText,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: Text(
-            optionText,
-            style: const TextStyle(fontSize: 16),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

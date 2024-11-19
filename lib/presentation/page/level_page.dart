@@ -71,99 +71,90 @@ class LevelPage extends StatelessWidget {
           }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: GetBuilder<CLevel>(
-              builder: (controller) {
-                if (controller.listLevel.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return ListView.builder(
-                  padding: const EdgeInsets.only(top: 50),
-                  itemCount: controller.listLevel.length,
-                  itemBuilder: (context, index) {
-                    final Level level = controller.listLevel[index];
-                    // Level sebelumnya harus selesai untuk membuka level selanjutnya
-                    final bool isLocked = index > 0;
+            child: GetBuilder<CLevel>(builder: (controller) {
+              // Memastikan data level selalu terbaru
+              if (controller.listLevel.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return ListView.builder(
+                padding: const EdgeInsets.only(top: 50),
+                itemCount: controller.listLevel.length,
+                itemBuilder: (context, index) {
+                  final Level level = controller.listLevel[index];
+                  // Logika terkunci jika level sebelumnya belum tercapai
+                  final bool isLocked = index > 0 &&
+                      !user.userScores!.any((e) => e.idLevel == level.id);
 
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: GestureDetector(
-                        onTap: isLocked
-                            ? null
-                            : () =>
-                                Get.to(() => QuizPage(), arguments: level.id),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: isLocked
-                                ? const Color(0xFF79747E)
-                                : AppColor.primary,
-                          ),
-                          height: 120,
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Level id ${level.id}',
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: GestureDetector(
+                      onTap: isLocked
+                          ? null
+                          : () => Get.to(() => QuizPage(), arguments: level.id),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: isLocked
+                              ? const Color(0xFF79747E)
+                              : AppColor.primary,
+                        ),
+                        height: 120,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Level id ${level.id}',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
                                       ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        level.levelDesc ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                        ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      level.levelDesc ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
                                       ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Target Score: ${level.targetScore}',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white70,
-                                            ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Target Score: ${level.targetScore}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white70,
                                           ),
-                                          const SizedBox(width: 10),
-                                          Text(
-                                            'Difficulty: ${level.difficulty}',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white70,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                Icon(
-                                  isLocked ? Icons.lock : Icons.play_arrow,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
-                              ],
-                            ),
+                              ),
+                              Icon(
+                                isLocked ? Icons.lock : Icons.play_arrow,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    );
-                  },
-                );
-              },
-            ),
+                    ),
+                  );
+                },
+              );
+            }),
           );
         }),
       ),

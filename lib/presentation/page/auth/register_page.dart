@@ -1,9 +1,13 @@
+import 'package:d_info/d_info.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_traffic/config/app_asset.dart';
 import 'package:mobile_traffic/config/app_color.dart';
 import 'package:mobile_traffic/data/source/source_user.dart';
+import 'package:mobile_traffic/presentation/page/auth/login_page.dart';
+
+import '../home_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -19,11 +23,19 @@ class _RegisterPageState extends State<RegisterPage> {
   final formKey = GlobalKey<FormState>();
   register() async {
     if (formKey.currentState!.validate()) {
-      await SourceUser.register(
+      final result = await SourceUser.register(
         controllerName.text,
         controllerEmail.text,
         controllerPassword.text,
       );
+      print('$result >>>INI RESULT');
+      if (result) {
+        DInfo.notifSuccess('success', 'success login');
+        Get.off(() => HomePage());
+      } else {
+        DInfo.dialogError(context, 'gagal login');
+        DInfo.closeDialog(context);
+      }
     }
   }
 
@@ -66,7 +78,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 value == '' ? 'Jangan kosong' : null,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0)),
                             decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
@@ -83,30 +96,31 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ),
                           ),
-                          DView.spaceHeight(),
-                          TextFormField(
-                            controller: controllerName,
-                            validator: (value) =>
-                                value == '' ? 'Jangan kosong' : null,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    const BorderSide(color: Colors.black),
-                              ),
-                              hintText: 'phone',
-                              isDense: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 20,
-                              ),
-                            ),
-                          ),
+                          // DView.spaceHeight(),
+                          // TextFormField(
+                          //   // controller: controllerName,
+                          //   // validator: (value) =>
+                          //   //     value == '' ? 'Jangan kosong' : null,
+                          //   // autovalidateMode:
+                          //   //     AutovalidateMode.onUserInteraction,
+                          //   style: const TextStyle(
+                          //       color: Color.fromARGB(255, 0, 0, 0)),
+                          //   decoration: InputDecoration(
+                          //     fillColor: Colors.white,
+                          //     filled: true,
+                          //     border: OutlineInputBorder(
+                          //       borderRadius: BorderRadius.circular(10),
+                          //       borderSide:
+                          //           const BorderSide(color: Colors.black),
+                          //     ),
+                          //     hintText: 'phone',
+                          //     isDense: true,
+                          //     contentPadding: const EdgeInsets.symmetric(
+                          //       horizontal: 20,
+                          //       vertical: 20,
+                          //     ),
+                          //   ),
+                          // ),
                           DView.spaceHeight(),
                           TextFormField(
                             controller: controllerEmail,
@@ -114,7 +128,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 value == '' ? 'Jangan kosong' : null,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0)),
                             decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
@@ -139,7 +154,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             obscureText: true,
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0)),
                             decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,

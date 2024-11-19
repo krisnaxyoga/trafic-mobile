@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
           await SourceUser.login(controllerEmail.text, controllerPassword.text);
       print(success);
       if (success) {
-        DInfo.notifSuccess('success', 'success registrasi');
+        DInfo.notifSuccess('success', 'success login');
         Get.off(() => HomePage());
       } else {
         DInfo.dialogError(context, 'gagal login');

@@ -46,23 +46,22 @@ class SourceUser {
       'name': name,
       'email': email,
       'password': password,
-      'created_at': DateTime.now().toIso8601String(),
-      'updated_at': DateTime.now().toIso8601String(),
     });
-    print(responseBody);
+
     if (responseBody == null) return false;
 
-    if (responseBody['success']) {
-      DInfo.notifSuccess('success', 'success registrasi');
-    } else {
-      if (responseBody['message'] == 'email') {
-        DInfo.toastError('Email sudah terdaftar');
+    bool success = responseBody['success'] ?? true;
+
+    if (success) {
+      var mapUser = responseBody['data'];
+      if (mapUser != null) {
+        Session.saveUser(User.fromJson(mapUser), token: responseBody['token']);
       } else {
         DInfo.toastError('Gagal Register');
       }
     }
 
-    return responseBody['success'];
+    return success;
   }
 
   static Future<User?> getUser() async {

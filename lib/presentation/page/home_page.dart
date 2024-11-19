@@ -14,6 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CUser cUser = Get.put(CUser()); // Inisialisasi controller
+    Get.put(CUser()).onInit();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -50,13 +51,13 @@ class HomePage extends StatelessWidget {
               ListTile(
                 title: const Text('Profile'),
                 onTap: () {
-                  Navigator.pushNamed(context, '/profile');
+                  Get.to(() => const ProfilePage());
                 },
               ),
               ListTile(
                 title: const Text('Level'),
                 onTap: () {
-                  Navigator.pushNamed(context, '/level');
+                  Get.to(() => LevelPage());
                 },
               ),
               ListTile(
@@ -84,65 +85,68 @@ class HomePage extends StatelessWidget {
           if (user.idUser == null) {
             return const Center(child: CircularProgressIndicator());
           }
-          return Center(
-            child: Column(
-              children: [
-                SizedBox(height: 50),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: AppColor.primary,
-                  ),
-                  width: 400,
-                  height: 260,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${user.userScores?[0].score ?? "-"}',
-                          style: TextStyle(
-                            fontSize: 70,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(height: 50),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColor.primary,
+                    ),
+                    width: 400,
+                    height: 260,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${user.total_score ?? "-"}',
+                            style: TextStyle(
+                              fontSize: 70,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Score',
-                          style: TextStyle(fontSize: 30, color: Colors.white),
-                        ),
-                      ],
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Score',
+                            style: TextStyle(fontSize: 30, color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Material(
-                  color: AppColor.primary,
-                  borderRadius: BorderRadius.circular(30),
-                  child: InkWell(
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Material(
+                    color: AppColor.primary,
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () {
-                      Get.to(() => LevelPage());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 16),
-                      child: Text(
-                        'Start Game',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(30),
+                      onTap: () {
+                        Get.to(() => LevelPage());
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 16),
+                        child: Text(
+                          'Start Game',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }),
